@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->onDelete('cascade');
+            $table->foreignId('operatori_id')->onDelete('cascade');
             $table->string('titolo');
             $table->text('descrizione');
             $table->date('data');

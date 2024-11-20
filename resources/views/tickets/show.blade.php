@@ -31,6 +31,11 @@
             <p>{{ $ticket->data }}</p>
           </div>
 
+          <div class="mb-4">
+            <strong>Operatore:</strong>
+            <p>{{ $ticket->operatore->nome ?? 'Nessun Operatore' }}</p>
+          </div>
+
           <a href="{{ route('tickets.index') }}" class="text-blue-600">Torna alla lista dei ticket</a>
         </div>
       </div>

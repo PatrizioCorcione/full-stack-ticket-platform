@@ -25,6 +25,7 @@ class TicketSeeder extends Seeder
                     'data' => $faker->date(),
                     'stato' => $faker->randomElement(['ASSEGNATO', 'IN LAVORAZIONE', 'CHIUSO']),
                     'category_id' => rand(1, 3),
+                    'operatori_id' => rand(1, 5),
                 ]);
             }
         }

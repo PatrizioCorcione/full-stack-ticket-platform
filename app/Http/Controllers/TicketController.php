@@ -14,7 +14,7 @@ class TicketController extends Controller
     public function index()
     {
         // Recupera tutti i ticket dal database
-        $tickets = Ticket::with('category')->get();
+        $tickets = Ticket::with('category', 'operatore')->orderBy('id', 'desc')->get();
         return view('dashboard', compact('tickets')); // Passa i ticket alla vista
     }
 
@@ -23,7 +23,11 @@ class TicketController extends Controller
      */
     public function create()
     {
-        //
+        // Recupera tutte le categorie
+        $categories = Category::all();
+
+        // Passa le categorie alla vista 'tickets.create'
+        return view('tickets.create', compact('categories'));
     }
 
     /**
@@ -31,8 +35,29 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validazione dei dati
+        $validated = $request->validate([
+            'titolo' => 'required|string|max:255',
+            'descrizione' => 'required|string',
+            'stato' => 'required|in:ASSEGNATO,IN LAVORAZIONE,CHIUSO',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        // Crea una nuova istanza del ticket e assegna i valori
+        $ticket = new Ticket();
+        $ticket->titolo = $validated['titolo'];
+        $ticket->descrizione = $validated['descrizione'];
+        $ticket->stato = $validated['stato'];
+        $ticket->category_id = $validated['category_id'];
+        $ticket->data = $request->input('data', now());
+
+        // Salva il ticket nel database
+        $ticket->save();
+
+        // Redirigi con un messaggio di successo
+        return redirect()->route('tickets.index')->with('success', 'Ticket creato con successo!');
     }
+
 
     /**
      * Display the specified resource.
@@ -68,26 +93,20 @@ class TicketController extends Controller
     {
         // Validazione dei dati
         $validated = $request->validate([
-            'titolo' => 'required|string|max:255',
-            'descrizione' => 'required|string',
             'stato' => 'required|in:ASSEGNATO,IN LAVORAZIONE,CHIUSO',
-            'category_id' => 'required|exists:categories,id',
         ]);
 
         // Recupera il ticket
         $ticket = Ticket::findOrFail($id);
 
         // Modifica i campi
-        $ticket->titolo = $validated['titolo'];
-        $ticket->descrizione = $validated['descrizione'];
         $ticket->stato = $validated['stato'];
-        $ticket->category_id = $validated['category_id'];  // Assicurati che category_id venga assegnato correttamente
 
         // Salva i cambiamenti
         $ticket->save();
 
-        // Redirigi l'utente con un messaggio di successo
-        return redirect()->route('tickets.index')->with('success', 'Ticket aggiornato con successo!');
+        // Redirigi l'utente
+        return redirect()->route('tickets.index');
     }
 
     /**

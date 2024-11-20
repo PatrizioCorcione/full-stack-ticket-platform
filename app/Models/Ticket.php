@@ -14,11 +14,16 @@ class Ticket extends Model
         'descrizione',
         'data',
         'stato',
-        'operatore_id',
+        'operatori_id',
     ];
     // Definisci la relazione many-to-one con la categoria
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    // Relazione inversa con Operatore
+    public function operatore()
+    {
+        return $this->belongsTo(Operatore::class, 'operatori_id');
     }
 }
