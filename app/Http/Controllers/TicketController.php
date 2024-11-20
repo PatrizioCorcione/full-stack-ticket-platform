@@ -36,9 +36,13 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        // Recupera il ticket con la sua categoria
+        $ticket = Ticket::with('category')->findOrFail($id);
+
+        // Passa il ticket alla vista 'tickets.show'
+        return view('tikets.show', compact('ticket'));
     }
 
     /**
