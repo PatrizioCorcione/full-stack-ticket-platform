@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 use App\Models\Category;
+use App\Models\Operatore;
 
 class TicketController extends Controller
 {
@@ -23,12 +24,14 @@ class TicketController extends Controller
      */
     public function create()
     {
-        // Recupera tutte le categorie
+        // Recupera tutte le categorie e gli operatori
         $categories = Category::all();
+        $operatori = Operatore::all();
 
-        // Passa le categorie alla vista 'tickets.create'
-        return view('tickets.create', compact('categories'));
+        // Passa le categorie e gli operatori alla vista
+        return view('tickets.create', compact('categories', 'operatori'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -41,6 +44,7 @@ class TicketController extends Controller
             'descrizione' => 'required|string',
             'stato' => 'required|in:ASSEGNATO,IN LAVORAZIONE,CHIUSO',
             'category_id' => 'required|exists:categories,id',
+            'operatore_id' => 'required|exists:operatori,id',
         ]);
 
         // Crea una nuova istanza del ticket e assegna i valori
@@ -49,6 +53,7 @@ class TicketController extends Controller
         $ticket->descrizione = $validated['descrizione'];
         $ticket->stato = $validated['stato'];
         $ticket->category_id = $validated['category_id'];
+        $ticket->operatori_id = $validated['operatore_id'];
         $ticket->data = $request->input('data', now());
 
         // Salva il ticket nel database

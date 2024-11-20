@@ -48,6 +48,18 @@
               </select>
             </div>
 
+            <div class="mb-4">
+              <label for="operatore_id" class="block font-medium text-gray-700">Operatore</label>
+              <select name="operatore_id" id="operatore_id"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                required>
+                @foreach ($operatori as $operatore)
+                  <option value="{{ $operatore->id }}">{{ $operatore->nome }}</option>
+                @endforeach
+              </select>
+            </div>
+
+
             <div class="flex items-center justify-between">
               <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Crea Ticket</button>
               <a href="{{ route('tickets.index') }}" class="text-blue-600">Torna alla lista dei ticket</a>

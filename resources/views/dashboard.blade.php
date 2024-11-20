@@ -1,8 +1,10 @@
 <x-app-layout>
   <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Dashboard') }}
+
+      <a href="{{ route('tickets.create') }}" class="ml-4 text-sm text-blue-600">Crea Ticket</a>
     </h2>
+
   </x-slot>
 
   <div class="py-12">
@@ -18,7 +20,8 @@
               <thead>
                 <tr>
                   <th class="px-4 py-2 border">Titolo</th>
-                  <th class="px-4 py-2 border">Descrizione</th>
+                  <th class="px-4 py-2 border">Sato</th>
+                  <th class="px-4 py-2 border">Categoria</th> <!-- Aggiungi la colonna Categoria -->
                   <th class="px-4 py-2 border">Operatore</th>
                   <th class="px-4 py-2 border">Operazioni</th>
                 </tr>
@@ -27,8 +30,10 @@
                 @foreach ($tickets as $ticket)
                   <tr>
                     <td class="px-4 py-2 border">{{ $ticket->titolo }}</td>
-                    <td class="px-4 py-2 border">{{ $ticket->descrizione }}</td>
-                    <td class="px-4 py-2 border">{{ $ticket->operatore->nome ?? 'Nessun operatore' }}</td>
+                    <td class="px-4 py-2 border">{{ $ticket->stato }}</td>
+                    <td class="px-4 py-2 border">{{ $ticket->operatore->nome ?? 'Nessuna Operatore' }}</td>
+                    <td class="px-4 py-2 border">{{ $ticket->category->name ?? 'Nessuna Categoria' }}</td>
+                    <!-- Mostra il nome della categoria -->
                     <td class="px-4 py-2 border">
                       <a href="{{ route('tickets.show', $ticket) }}" class="text-blue-600">Visualizza</a>
                       <a href="{{ route('tickets.edit', $ticket) }}" class="text-blue-600">Modifica</a>
